@@ -74,7 +74,8 @@ namespace Rivet {
       _hist_dR_gl_max         = bookHisto1D(_name("dR_gamma_lepton_max",_ptcut, _mode), 80, 0.4, 5 ); //dSigma / dR(gamma, lepton2)
       _hist_m_gl_min          = bookHisto1D(_name("m_gamma_lepton_min",_ptcut, _mode), logspace(80, 40, 1500) ); //dSigma / dm(gamma, lepton1)
       _hist_m_gl_max          = bookHisto1D(_name("m_gamma_lepton_max",_ptcut, _mode), logspace(80, 40, 1500) ); //dSigma / dm(gamma, lepton2)
-
+      _hist_pt_jet1   = bookHisto1D(_name("pt_leadingjet",_ptcut, _mode), logspace(80, 50, 1500) ); // dSigma / dE^gamma_T for Njet >= 0
+      _hist_pt_jet2   = bookHisto1D(_name("pt_subleadingjet",_ptcut, _mode), logspace(80, 50, 1500) ); // dSigma / dE^gamma_T for Njet = 0
     }
 
 
@@ -152,7 +153,10 @@ namespace Rivet {
       // deltaR
       _hist_dR_gl_min->fill(min(dr_g_lep1, dr_g_lep2), weight);
       _hist_dR_gl_max->fill(max(dr_g_lep1, dr_g_lep2), weight);
-
+      
+      //jets
+      _hist_pt_jet1->fill(jets[0].pT(), weight);
+      _hist_pt_jet2->fill(jets[1].pT(), weight);
 
     }
 
@@ -168,6 +172,8 @@ namespace Rivet {
       scale(_hist_dR_gl_max, crossSection()/picobarn/sumOfWeights()); // norm to cross section
       scale(_hist_m_gl_min, crossSection()/picobarn/sumOfWeights()); // norm to cross section
       scale(_hist_m_gl_max, crossSection()/picobarn/sumOfWeights()); // norm to cross section
+      scale(_hist_pt_jet1, crossSection()/picobarn/sumOfWeights()); // norm to cross section
+      scale(_hist_pt_jet2, crossSection()/picobarn/sumOfWeights()); // norm to cross section
 
     }
 
@@ -194,14 +200,42 @@ namespace Rivet {
 	Histo1DPtr _hist_dR_gl_max;
 	Histo1DPtr _hist_m_gl_min;
 	Histo1DPtr _hist_m_gl_max;
+	Histo1DPtr _hist_pt_jet1;
+	Histo1DPtr _hist_pt_jet2;
+
     //@}
 
 
   };
 
+  class MC_Z_DIRECT_60 : public MC_Z_DIRECT{
+  public:
+		MC_Z_DIRECT_60():MC_Z_DIRECT("MC_DIRECT_60")
+		{ _mode = 3;
+		  _ptcut = 60; 
+		}
+  };
+
+  class MC_Z_DIRECT_E : public MC_Z_DIRECT{
+  public:
+		MC_Z_DIRECT_E():MC_Z_DIRECT("MC_DIRECT_E")
+		{ _mode = 1;
+		  _ptcut = 15; 
+		}
+  };
+  class MC_Z_DIRECT_E_60 : public MC_Z_DIRECT{
+  public:
+		MC_Z_DIRECT_E_60():MC_Z_DIRECT("MC_DIRECT_E_60")
+		{ _mode = 1;
+		  _ptcut = 60; 
+		}
+  };
 
   // The hook for the plugin system
   DECLARE_RIVET_PLUGIN(MC_Z_DIRECT);
+  DECLARE_RIVET_PLUGIN(MC_Z_DIRECT_E);
+  DECLARE_RIVET_PLUGIN(MC_Z_DIRECT_60);
+  DECLARE_RIVET_PLUGIN(MC_Z_DIRECT_E_60);
 
 
 }

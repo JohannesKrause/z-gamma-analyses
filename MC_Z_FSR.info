@@ -1,0 +1,34 @@
+Name: MC_Z_FSR
+Year: 2017
+Summary: MC-Analysis to study FSR-photons
+Experiment: <Insert the experiment name>
+Collider: <Insert the collider name>
+SpiresID: <Insert the Inspire ID>
+Status: UNVALIDATED
+Authors:
+ - Johannes Krause <johannes.krause1@tu-dresden.de>
+#References:
+ - <based on CMS_2015_I1346843>
+# - <Example: doi:10.1016/j.physletb.2006.04.048>
+# - <Example: arXiv:hep-ex/0511054 (plus erratum)>
+RunInfo:
+  <any Z (+jets) setup, with Z decaying to myons and photons radiated off>
+NumEvents: 1000000
+NeedCrossSection: no
+#Beams: <Insert beam pair(s), e.g. [p-, p+] or [[p-, e-], [p-, e+]]>
+#Energies: <Insert list of run energies or beam energy pairs in GeV,
+#           e.g. [1960] or [[8.0, 3.5]] or [630, 1800]. Order pairs to match "Beams">
+Description:
+  '< Cuts:  
+       2 myons, opposite charge, pT> 10 GeV, |eta| < 2.5 
+       hardest myon: pT> 20 GeV 
+       photonen: pT>5GeV , |eta| < 1.4
+          -> highest pT-photon selected that does not come from a decay 
+             and has a dR in (0.05, 3) to the next myon
+       myon pair: invariant mass in (30, 87)
+     >'
+BibKey: 
+BibTeX: ''
+ToDo:
+ - Implement the analysis, test it, remove this ToDo, and mark as VALIDATED :-)
+

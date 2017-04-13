@@ -1,3 +1,4 @@
+
 # BEGIN PLOT /MC_Z_DIRECT/*
 LogY=1
 RatioPlotYMax=1.5
@@ -21,14 +22,12 @@ YLabel=$\text{d}\sigma_{Z\gamma} / \text{d}E^\gamma_\text{T}$ [pb $\text{GeV}^{-
 
 
 # BEGIN PLOT /MC_Z_DIRECT/eta_excl_*
-LogX=1
 Title= $\eta^\gamma$, exclusive
 XLabel=$\eta^\gamma$ [GeV]
 YLabel=$\text{d}\sigma_{Z\gamma} / \text{d}\eta^\gamma$ [pb $\text{GeV}^{-1}$]
 # END PLOT
 
 # BEGIN PLOT /MC_Z_DIRECT/eta_incl_*
-LogX=1
 Title= $\eta^\gamma$, inclusive
 XLabel=$\eta^\gamma$ [GeV]
 YLabel=$\text{d}\sigma_{Z\gamma} / \text{d}\eta^\gamma$ [pb $\text{GeV}^{-1}$]
@@ -36,14 +35,14 @@ YLabel=$\text{d}\sigma_{Z\gamma} / \text{d}\eta^\gamma$ [pb $\text{GeV}^{-1}$]
 
 # BEGIN PLOT /MC_Z_DIRECT/njet_excl_*
 Title=Exclusive Jet multiplicity
-XLabel=Jet multiplicity 
-YLabel=$\sigma(pp \rightarrow Z\gamma) N_\text{jet} = 0$ [pb]
+XLabel=$N_\text{jet}$
+YLabel=$\sigma(pp \rightarrow Z\gamma + n ~\text{jets}), N_\text{jet}=n$ [pb]
 # END PLOT
 
 # BEGIN PLOT /MC_Z_DIRECT/njet_incl_*
 Title=Inclusive Jet multiplicity
-XLabel=Jet multiplicity 
-YLabel=$\sigma(pp \rightarrow Z\gamma) N_\text{jet}\ge 0$ [pb]
+XLabel=$N_\text{jet}$
+YLabel=$\sigma(pp \rightarrow Z\gamma+ n~ \text{jets}), N_\text{jet} \ge n$ [pb]
 # END PLOT
 
 # BEGIN PLOT /MC_Z_DIRECT/mZgamma_*

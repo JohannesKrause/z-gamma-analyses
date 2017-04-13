@@ -160,8 +160,8 @@ namespace Rivet {
       // Multiplicities
       _hist_Njet_excl->fill(Njets, weight);
       for (size_t i = 0; i < 5; ++i) {
-        if (Njets > i) {
-          _hist_Njet_incl->fill(i+0.5, weight);
+        if (Njets >= i) {
+          _hist_Njet_incl->fill(i, weight);
         }
       }
       // HT
@@ -179,8 +179,8 @@ namespace Rivet {
       _hist_dR_gl_max->fill(max(dr_g_lep1, dr_g_lep2), weight);
       
       //jets
-      _hist_pt_jet1->fill(goodJets[0].pT(), weight);
-      _hist_pt_jet2->fill(goodJets[1].pT(), weight);
+      if(goodJets.size()>0) _hist_pt_jet1->fill(goodJets[0].pT(), weight);
+      if(goodJets.size()>1) _hist_pt_jet2->fill(goodJets[1].pT(), weight);
 
 	  //leptons
 	  _hist_pt_lep1->fill(leptons[1].pT(), weight);

@@ -1,6 +1,6 @@
-Name: MC_Z_DIRECT
+Name: MC_Z_DIRECT_60
 Year: <Insert year of publication>
-Summary: <Insert short MC_Z_DIRECT description>
+Summary: <Insert short MC_Z_DIRECT_60 description>
 Experiment: <Insert the experiment name>
 Collider: <Insert the collider name>
 SpiresID: <Insert the Inspire ID>
@@ -21,17 +21,10 @@ NeedCrossSection: no
 #Energies: <Insert list of run energies or beam energy pairs in GeV,
 #           e.g. [1960] or [[8.0, 3.5]] or [630, 1800]. Order pairs to match "Beams">
 Description:
-  '<Cuts:
-       1 bare Z-Boson with mass >40GeV
-       2 leptons: |eta| < 2.5 && pT> 25GeV
-       photons: |eta| < 2.5 && pT> _ptcut
-       photon isolation: coneEnergy(dr=0.4) / leadingPhoton.E() >= 0.5
-       deltaR(leadingPhoton, lepton) < 0.4 
-
-       jets:  |eta| < 4.4
-               deltaR (jet, {gamma, lepton1, lepton2} ) < 0.3
-     
-    * >'
+  '<Insert a fairly long description, including what is measured
+  and if possible what it is useful for in terms of MC validation
+  and tuning. Use LaTeX for maths like $\pT > 50\;\GeV$.
+  Use single quotes around the block if required (see http://www.yaml.org)>'
 BibKey: 
 BibTeX: ''
 ToDo:

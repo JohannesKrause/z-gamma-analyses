@@ -9,11 +9,15 @@
 namespace Rivet {
    /* Cuts:
     * 	1 bare Z-Boson with mass >40GeV
-    *   2 leptons: |eta| < 2.47 && pT> 25GeV
-    *   photons: |eta| < 2.37 && pT> _ptcut
+    *   2 leptons: |eta| < 2.5 && pT> 25GeV
+    *   photons: |eta| < 2.5 && pT> _ptcut
     *   photon isolation: coneEnergy(dr=0.4) / leadingPhoton.E() >= 0.5
     *   deltaR(leadingPhoton, lepton) < 0.4 
     * 
+    *   jets:  |eta| < 4.4
+    *           deltaR (jet, {gamma, lepton1, lepton2} ) < 0.3
+    * 
+    *  lepton1: high pT, lepton2: low pT
     * */
 
   /// @brief Add a short analysis description here
@@ -39,14 +43,15 @@ namespace Rivet {
       FinalState fs;
       declare(fs, "FS");
 
-      Cut cuts = Cuts::abseta < 2.47 && Cuts::pT > 25*GeV;
+      Cut cuts = Cuts::abseta < 2.5 && Cuts::pT > 25*GeV;
 
       // Z finder
-      ZFinder zf(fs, cuts, _mode==3? PID::MUON : PID::ELECTRON, 40.0*GeV, 1000.0*GeV, 0.0);
+      ZFinder zf(fs, cuts, _mode==3? PID::MUON : PID::ELECTRON, 40.0*GeV, 1000.0*GeV, 0.1, ZFinder::CLUSTERNODECAY, ZFinder::NOTRACK);
       declare(zf, "ZF");
 
+
       // leading photon
-      LeadingParticlesFinalState photonfs(FinalState(Cuts::abseta < 2.37 && Cuts::pT > _ptcut*GeV));
+      LeadingParticlesFinalState photonfs(FinalState(Cuts::abseta < 2.5 && Cuts::pT > _ptcut*GeV));
       photonfs.addParticleId(PID::PHOTON);
       declare(photonfs, "LeadingPhoton");
 
@@ -65,17 +70,23 @@ namespace Rivet {
 
 
       // Book histograms
-      _hist_EgammaT_incl   = bookHisto1D(_name("et_incl",_ptcut, _mode), logspace(80,_ptcut, 1500) ); // dSigma / dE^gamma_T for Njet >= 0
-      _hist_EgammaT_excl   = bookHisto1D(_name("et_excl",_ptcut, _mode), logspace(80,_ptcut, 1500) ); // dSigma / dE^gamma_T for Njet = 0
-      _hist_Njet_incl       = bookHisto1D(_name("njet_incl",_ptcut, _mode), 5, 0,5 ); //dSigma / dNJET with NJET>= Njet
-      _hist_Njet_excl       = bookHisto1D(_name("njet_excl",_ptcut, _mode), 5, 0,5 ); //dSigma / dNJET with NJET= Njet
-      _hist_mZgamma        = bookHisto1D(_name("mZgamma",_ptcut, _mode), logspace(80,_ptcut, 1500) ); //dSigma / dmZgamma
+      _hist_EgammaT_incl      = bookHisto1D(_name("et_incl",_ptcut, _mode), logspace(80,_ptcut, 1500) ); // dSigma / dE^gamma_T for Njet >= 0
+      _hist_EgammaT_excl      = bookHisto1D(_name("et_excl",_ptcut, _mode), logspace(80,_ptcut, 1500) ); // dSigma / dE^gamma_T for Njet = 0
+      _hist_eta_gamma_incl    = bookHisto1D(_name("eta_incl",_ptcut, _mode), 80, -2.5, 2.5 ); // dSigma / dE^gamma_T for Njet >= 0
+      _hist_eta_gamma_excl    = bookHisto1D(_name("eta_excl",_ptcut, _mode), 80, -2.5, 2.5 ); // dSigma / dE^gamma_T for Njet = 0
+      _hist_Njet_incl         = bookHisto1D(_name("njet_incl",_ptcut, _mode), 5, -0.5, 4.5 ); //dSigma / dNJET with NJET>= Njet
+      _hist_Njet_excl         = bookHisto1D(_name("njet_excl",_ptcut, _mode), 5, -0.5, 4.5 ); //dSigma / dNJET with NJET= Njet
+      _hist_mZgamma           = bookHisto1D(_name("mZgamma",_ptcut, _mode), logspace(80,_ptcut, 1500) ); //dSigma / dmZgamma
       _hist_dR_gl_min         = bookHisto1D(_name("dR_gamma_lepton_min",_ptcut, _mode), 80, 0.4, 5 ); //dSigma / dR(gamma, lepton1)
       _hist_dR_gl_max         = bookHisto1D(_name("dR_gamma_lepton_max",_ptcut, _mode), 80, 0.4, 5 ); //dSigma / dR(gamma, lepton2)
       _hist_m_gl_min          = bookHisto1D(_name("m_gamma_lepton_min",_ptcut, _mode), logspace(80, 40, 1500) ); //dSigma / dm(gamma, lepton1)
       _hist_m_gl_max          = bookHisto1D(_name("m_gamma_lepton_max",_ptcut, _mode), logspace(80, 40, 1500) ); //dSigma / dm(gamma, lepton2)
-      _hist_pt_jet1   = bookHisto1D(_name("pt_leadingjet",_ptcut, _mode), logspace(80, 50, 1500) ); // dSigma / dE^gamma_T for Njet >= 0
-      _hist_pt_jet2   = bookHisto1D(_name("pt_subleadingjet",_ptcut, _mode), logspace(80, 50, 1500) ); // dSigma / dE^gamma_T for Njet = 0
+      _hist_pt_jet1           = bookHisto1D(_name("pt_leadingjet",_ptcut, _mode), logspace(80, 30, 1500) ); 
+      _hist_pt_jet2           = bookHisto1D(_name("pt_subleadingjet",_ptcut, _mode), logspace(80, 30, 1500) ); 
+      _hist_pt_lep1           = bookHisto1D(_name("pt_leadinglepton",_ptcut, _mode), logspace(80, 25, 1500) ); 
+      _hist_pt_lep2           = bookHisto1D(_name("pt_subleadinglepton",_ptcut, _mode), logspace(80, 25, 1500) ); 
+      _hist_ht	      			  = bookHisto1D(_name("HT",_ptcut, _mode), logspace(30,_ptcut, 1500) ); // HT
+      
     }
 
 
@@ -105,7 +116,8 @@ namespace Rivet {
       if ( !(Zboson.mass() > 40.0*GeV) )  vetoEvent;
       
       // check charge of constituent leptons
-      const ParticleVector& leptons = zf.constituents();
+      //leptons are orderd by pt, starting with lowest pt
+      const ParticleVector& leptons = zf.constituents(cmpMomByAscPt);
       if (leptons.size() != 2 || leptons[0].charge() * leptons[1].charge() > 0.)  vetoEvent;
 
       // check photon-lepton overlap
@@ -116,27 +128,35 @@ namespace Rivet {
       // count jets
       const FastJets& jetfs = apply<FastJets>(event, "Jets");
       Jets jets = jetfs.jets(cmpMomByEt);
-      int goodJets = 0;
+      Jets goodJets;
+      int num_goodJets = 0;
       foreach (const Jet& j, jets) {
         if ( !(j.Et() > 30.0*GeV) )  break;
         if ( (j.abseta() < 4.4) && \
              (deltaR(leadingPhoton, j) > 0.3) &&    \
              (deltaR(leptons[0],    j) > 0.3) &&            \
-             (deltaR(leptons[1],    j) > 0.3) )  ++goodJets;
+             (deltaR(leptons[1],    j) > 0.3) ) {
+					++num_goodJets;
+					goodJets.push_back(j);
+		}
       }
 
-      double Njets = double(goodJets) + 0.5;
+      double Njets = double(num_goodJets);
       double photonEt = leadingPhoton.Et()*GeV;
+      double photonEta = leadingPhoton.eta();
       double mZgamma = (Zboson.momentum() + leadingPhoton.momentum()).mass() * GeV; 
-      double dr_g_lep1= deltaR(leptons[0].momentum(), leadingPhoton.momentum() );
-      double dr_g_lep2= deltaR(leptons[1].momentum(), leadingPhoton.momentum() );
-      double m_g_lep1 = (leptons[0].momentum() + leadingPhoton.momentum()).mass(); 
-      double m_g_lep2 = (leptons[1].momentum() + leadingPhoton.momentum()).mass(); 
+      double dr_g_lep2= deltaR(leptons[0].momentum(), leadingPhoton.momentum() );
+      double dr_g_lep1= deltaR(leptons[1].momentum(), leadingPhoton.momentum() );
+      double m_g_lep1 = (leptons[1].momentum() + leadingPhoton.momentum()).mass(); 
+      double m_g_lep2 = (leptons[0].momentum() + leadingPhoton.momentum()).mass(); 
 
-      //ET histogramms
+      //gamma histogramms
       _hist_EgammaT_incl->fill(photonEt, weight);
-      if (!goodJets) _hist_EgammaT_excl->fill(photonEt, weight);
-      
+      _hist_eta_gamma_incl->fill(photonEta, weight);
+      if (!num_goodJets) {
+		  _hist_EgammaT_excl->fill(photonEt, weight);
+		  _hist_eta_gamma_excl->fill(photonEta, weight);
+	  }	
       // Multiplicities
       _hist_Njet_excl->fill(Njets, weight);
       for (size_t i = 0; i < 5; ++i) {
@@ -144,7 +164,11 @@ namespace Rivet {
           _hist_Njet_incl->fill(i+0.5, weight);
         }
       }
-      
+      // HT
+      double HT=0;
+      foreach (const Jet& gj, goodJets)  HT+=gj.pt();
+	  _hist_ht->fill(HT, weight);
+            
       // masses
       _hist_mZgamma->fill(mZgamma, weight);
       _hist_m_gl_min->fill(min(m_g_lep1, m_g_lep2), weight);
@@ -155,9 +179,13 @@ namespace Rivet {
       _hist_dR_gl_max->fill(max(dr_g_lep1, dr_g_lep2), weight);
       
       //jets
-      _hist_pt_jet1->fill(jets[0].pT(), weight);
-      _hist_pt_jet2->fill(jets[1].pT(), weight);
+      _hist_pt_jet1->fill(goodJets[0].pT(), weight);
+      _hist_pt_jet2->fill(goodJets[1].pT(), weight);
 
+	  //leptons
+	  _hist_pt_lep1->fill(leptons[1].pT(), weight);
+	  _hist_pt_lep2->fill(leptons[0].pT(), weight);
+	  
     }
 
 
@@ -165,6 +193,8 @@ namespace Rivet {
     void finalize() {
       scale(_hist_EgammaT_incl, crossSection()/picobarn/sumOfWeights()); // norm to cross section
       scale(_hist_EgammaT_excl, crossSection()/picobarn/sumOfWeights()); // norm to cross section
+      scale(_hist_eta_gamma_incl, crossSection()/picobarn/sumOfWeights()); // norm to cross section
+      scale(_hist_eta_gamma_excl, crossSection()/picobarn/sumOfWeights()); // norm to cross section
       scale(_hist_Njet_incl, crossSection()/picobarn/sumOfWeights()); // norm to cross section
       scale(_hist_Njet_excl, crossSection()/picobarn/sumOfWeights()); // norm to cross section
       scale(_hist_mZgamma, crossSection()/picobarn/sumOfWeights()); // norm to cross section
@@ -174,7 +204,9 @@ namespace Rivet {
       scale(_hist_m_gl_max, crossSection()/picobarn/sumOfWeights()); // norm to cross section
       scale(_hist_pt_jet1, crossSection()/picobarn/sumOfWeights()); // norm to cross section
       scale(_hist_pt_jet2, crossSection()/picobarn/sumOfWeights()); // norm to cross section
-
+      scale(_hist_pt_lep1, crossSection()/picobarn/sumOfWeights()); // norm to cross section
+      scale(_hist_pt_lep2, crossSection()/picobarn/sumOfWeights()); // norm to cross section
+      scale(_hist_ht, crossSection()/picobarn/sumOfWeights()); // norm to cross section
     }
 
     //@}
@@ -191,8 +223,8 @@ namespace Rivet {
 
     /// @name Histograms
     //@{
-    Histo1DPtr _hist_EgammaT_incl;
-	Histo1DPtr _hist_EgammaT_excl;
+    Histo1DPtr _hist_EgammaT_incl, _hist_EgammaT_excl;
+	Histo1DPtr _hist_eta_gamma_incl, _hist_eta_gamma_excl;
 	Histo1DPtr _hist_Njet_incl;
 	Histo1DPtr _hist_Njet_excl;
 	Histo1DPtr _hist_mZgamma;
@@ -200,8 +232,9 @@ namespace Rivet {
 	Histo1DPtr _hist_dR_gl_max;
 	Histo1DPtr _hist_m_gl_min;
 	Histo1DPtr _hist_m_gl_max;
-	Histo1DPtr _hist_pt_jet1;
-	Histo1DPtr _hist_pt_jet2;
+	Histo1DPtr _hist_pt_jet1, _hist_pt_lep1;
+	Histo1DPtr _hist_pt_jet2, _hist_pt_lep2;
+	Histo1DPtr _hist_ht;
 
     //@}
 
@@ -210,7 +243,8 @@ namespace Rivet {
 
   class MC_Z_DIRECT_60 : public MC_Z_DIRECT{
   public:
-		MC_Z_DIRECT_60():MC_Z_DIRECT("MC_DIRECT_60")
+		MC_Z_DIRECT_60():
+		    MC_Z_DIRECT("MC_Z_DIRECT_60")
 		{ _mode = 3;
 		  _ptcut = 60; 
 		}
@@ -218,14 +252,16 @@ namespace Rivet {
 
   class MC_Z_DIRECT_E : public MC_Z_DIRECT{
   public:
-		MC_Z_DIRECT_E():MC_Z_DIRECT("MC_DIRECT_E")
+		MC_Z_DIRECT_E():
+		     MC_Z_DIRECT("MC_Z_DIRECT_E")
 		{ _mode = 1;
 		  _ptcut = 15; 
 		}
   };
   class MC_Z_DIRECT_E_60 : public MC_Z_DIRECT{
   public:
-		MC_Z_DIRECT_E_60():MC_Z_DIRECT("MC_DIRECT_E_60")
+		MC_Z_DIRECT_E_60():
+		     MC_Z_DIRECT("MC_Z_DIRECT_E_60")
 		{ _mode = 1;
 		  _ptcut = 60; 
 		}

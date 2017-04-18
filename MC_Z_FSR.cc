@@ -54,9 +54,9 @@ namespace Rivet {
       _hist_pho_dr           = bookHisto1D("dr_all",80,0.05,5);  // delta_R to the closest lepton
       _hist_pho_dphi         = bookHisto1D("dphi_all", 80, 0.05, 2); //delta_Phi to the closest lepton
       _hist_pho_deta         = bookHisto1D("deta_all", 80, 0.05, 3); //delta_Phi to the closest lepton
-      _hist_mZgamma          = bookHisto1D("mZgamma", logspace(100,30, 200) ); //dSigma / dmZgamma
-      _hist_m_gl_next        = bookHisto1D("m_gamma_lepton_next", logspace(80, 10, 250) ); //dSigma / dm(gamma,  closest lepton)
-      _hist_qt               = bookHisto1D("qT", logspace(80, 1, 200) ); //dSigma / dm(gamma,  closest lepton)
+      _hist_mZgamma          = bookHisto1D("mZgamma", 100,30, 200 ); //dSigma / dmZgamma
+      _hist_m_gl_next        = bookHisto1D("m_gamma_lepton_next", 80, 10, 250 ); //dSigma / dm(gamma,  closest lepton)
+      _hist_qt               = bookHisto1D("qT", 80, 1, 200 ); //dSigma / dm(gamma,  closest lepton)
 
 
     
@@ -116,7 +116,7 @@ namespace Rivet {
       scale(_hist_mZgamma, crossSection() / sumOfWeights());
       scale(_hist_pho_deta, crossSection() / sumOfWeights());
       scale(_hist_pho_dphi, crossSection() / sumOfWeights());
-      
+      scale(_hist_qt, crossSection() / sumOfWeights());      
 
     }
 

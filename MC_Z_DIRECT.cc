@@ -76,16 +76,16 @@ namespace Rivet {
       _hist_eta_gamma_excl    = bookHisto1D(_name("eta_excl",_ptcut, _mode), 80, -2.5, 2.5 ); // dSigma / dE^gamma_T for Njet = 0
       _hist_Njet_incl         = bookHisto1D(_name("njet_incl",_ptcut, _mode), 5, -0.5, 4.5 ); //dSigma / dNJET with NJET>= Njet
       _hist_Njet_excl         = bookHisto1D(_name("njet_excl",_ptcut, _mode), 5, -0.5, 4.5 ); //dSigma / dNJET with NJET= Njet
-      _hist_mZgamma           = bookHisto1D(_name("mZgamma",_ptcut, _mode), logspace(80,_ptcut, 1500) ); //dSigma / dmZgamma
+      _hist_mZgamma           = bookHisto1D(_name("mZgamma",_ptcut, _mode), logspace(80, 40, 5000) ); //dSigma / dmZgamma
       _hist_dR_gl_min         = bookHisto1D(_name("dR_gamma_lepton_min",_ptcut, _mode), 80, 0.4, 5 ); //dSigma / dR(gamma, lepton1)
       _hist_dR_gl_max         = bookHisto1D(_name("dR_gamma_lepton_max",_ptcut, _mode), 80, 0.4, 5 ); //dSigma / dR(gamma, lepton2)
-      _hist_m_gl_min          = bookHisto1D(_name("m_gamma_lepton_min",_ptcut, _mode), logspace(80, 40, 1500) ); //dSigma / dm(gamma, lepton1)
-      _hist_m_gl_max          = bookHisto1D(_name("m_gamma_lepton_max",_ptcut, _mode), logspace(80, 40, 1500) ); //dSigma / dm(gamma, lepton2)
+      _hist_m_gl_min          = bookHisto1D(_name("m_gamma_lepton_min",_ptcut, _mode), logspace(80, 20, 1500) ); //dSigma / dm(gamma, lepton1)
+      _hist_m_gl_max          = bookHisto1D(_name("m_gamma_lepton_max",_ptcut, _mode), logspace(80, 20, 1500) ); //dSigma / dm(gamma, lepton2)
       _hist_pt_jet1           = bookHisto1D(_name("pt_leadingjet",_ptcut, _mode), logspace(80, 30, 1500) ); 
       _hist_pt_jet2           = bookHisto1D(_name("pt_subleadingjet",_ptcut, _mode), logspace(80, 30, 1500) ); 
       _hist_pt_lep1           = bookHisto1D(_name("pt_leadinglepton",_ptcut, _mode), logspace(80, 25, 1500) ); 
       _hist_pt_lep2           = bookHisto1D(_name("pt_subleadinglepton",_ptcut, _mode), logspace(80, 25, 1500) ); 
-      _hist_ht	      			  = bookHisto1D(_name("HT",_ptcut, _mode), logspace(30,_ptcut, 1500) ); // HT
+      _hist_ht	      		  = bookHisto1D(_name("HT",_ptcut, _mode), logspace(80,30, 5000) ); // HT
       
     }
 

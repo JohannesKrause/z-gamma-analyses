@@ -8,13 +8,13 @@
 
 namespace Rivet {
    /* Cuts:
-    * 	1 bare Z-Boson with mass >40GeV
+    * 	1 dressed Z-Boson with mass >40GeV
     *   2 leptons: |eta| < 2.5 && pT> 25GeV
     *   photons: |eta| < 2.5 && pT> _ptcut
     *   photon isolation: coneEnergy(dr=0.4) / leadingPhoton.E() >= 0.5
-    *   deltaR(leadingPhoton, lepton) < 0.4 
+    *   deltaR(leadingPhoton, lepton) > 0.4 
     * 
-    *   jets:  |eta| < 4.4
+    *   jets:  |eta| < 4.4, ET>30GeV
     *           deltaR (jet, {gamma, lepton1, lepton2} ) < 0.3
     * 
     *  lepton1: high pT, lepton2: low pT
@@ -46,7 +46,7 @@ namespace Rivet {
       Cut cuts = Cuts::abseta < 2.5 && Cuts::pT > 25*GeV;
 
       // Z finder
-      ZFinder zf(fs, cuts, _mode==3? PID::MUON : PID::ELECTRON, 40.0*GeV, 1000.0*GeV, 0.1, ZFinder::CLUSTERNODECAY, ZFinder::NOTRACK);
+      ZFinder zf(fs, cuts, _mode==3? PID::MUON : PID::ELECTRON, 40.0*GeV, 1000.0*GeV, 0.1, ZFinder::CLUSTERNODECAY, ZFinder::NOTRACK); 
       declare(zf, "ZF");
 
 
@@ -99,7 +99,7 @@ namespace Rivet {
       Particles photons = apply<LeadingParticlesFinalState>(event, "LeadingPhoton").particles();
       if (photons.size() != 1)  vetoEvent;
       const Particle& leadingPhoton = photons[0];
-
+      if (leadingPhoton.fromDecay()) vetoEvent;
       // check photon isolation
       double coneEnergy(0.0);
       Particles fs = apply<VetoedFinalState>(event, "isolatedFS").particles();

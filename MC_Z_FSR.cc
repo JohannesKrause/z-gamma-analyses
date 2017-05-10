@@ -12,7 +12,7 @@ namespace Rivet {
     * 2 leptons, opposite charge, pT> 15 GeV, |eta| < 2.5 
     * photonen: pT>5GeV , |eta| < 2.5
     *      -> leading photon selected:
-    *           not from a decay 
+    *  (removed)  not from a decay 
     *           dR in (0.05, 5) to the next lepton
     *           isolated from everything else
     * lepton pair: invariant mass in (30, 87)
@@ -87,7 +87,7 @@ namespace Rivet {
       const Particle & photon = photons[0];
       Particles fs = apply<FinalState>(event, "FS").particles();
       // check if the leading photon passes all cuts
-      if (photon.fromDecay() ) vetoEvent;
+     // if (photon.fromDecay() ) vetoEvent;
       const double dR = std::min(deltaR(photon,leptonen[0]), deltaR(photon,leptonen[1]) );
       if (!inRange(dR, 0.05, 5.0)) vetoEvent;
       // check photon isolation

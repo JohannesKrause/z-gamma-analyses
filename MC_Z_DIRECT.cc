@@ -99,7 +99,7 @@ namespace Rivet {
       Particles photons = apply<LeadingParticlesFinalState>(event, "LeadingPhoton").particles();
       if (photons.size() != 1)  vetoEvent;
       const Particle& leadingPhoton = photons[0];
-      if (leadingPhoton.fromDecay()) vetoEvent;
+      //if (leadingPhoton.fromDecay()) vetoEvent;
       // check photon isolation
       double coneEnergy(0.0);
       Particles fs = apply<VetoedFinalState>(event, "isolatedFS").particles();
@@ -124,7 +124,7 @@ namespace Rivet {
       foreach(const Particle& p, leptons) {
         if ( deltaR(leadingPhoton, p) < 0.4)  vetoEvent;
       }
-
+      
       // count jets
       const FastJets& jetfs = apply<FastJets>(event, "Jets");
       Jets jets = jetfs.jets(cmpMomByEt);
